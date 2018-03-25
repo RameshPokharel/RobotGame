@@ -1,8 +1,13 @@
 package myCustomPackage;
 
+import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 
-public class paintClass {
+public class paintClass extends Applet{
 	/*g.setColor(Color.WHITE);
 	this.getAppletContext().showStatus("Displaying image");
 	g.drawImage(image,0,0,800,480,this);
@@ -43,6 +48,41 @@ public class paintClass {
 	 g.fillArc(78,120,40,40,63,-174);
 	 g.fillRoundRect(120,96,40,40,120,120);
 	 g.fillArc(173,100,40,40,110,180);
-*/}
+*/
 
+	@Override
+	public void init() {
+		AffineTransform identity = new AffineTransform();
+
+		setSize(800, 480);
+		setBackground(Color.BLACK);
+		setFocusable(true);
+
+	
+	}
+	@Override
+	public void start() {
+		repaint();
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		  Graphics2D g2d = (Graphics2D) g.create();
+		  g.setColor(Color.blue);
+		  g.fillRect(20,20,100,100);
+
+		  
+		  Rectangle rectangle= new Rectangle(100,200, 300,200);
+		  //Rotate rectangle by 1 radian(Math.PI) from the bottom corner
+		  g2d.rotate(60, rectangle.x + rectangle.width/2, rectangle.y + rectangle.height/2);
+
+		  g2d.setColor(Color.red);
+		  //Draw rectangle
+		  g2d.fill(rectangle);
+
+	}
+}
+
+// g2d.rotate(60, rectangle.x + rectangle.width/2, 
+//rectangle.y + rectangle.height/2);
 

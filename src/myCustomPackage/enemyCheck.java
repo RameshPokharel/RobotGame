@@ -20,7 +20,7 @@ public class enemyCheck {
 	public void update() {
 		x -= 10;
 		r.setBounds(x, y+5, 2, 2);
-		if (x < 0) {
+		if (x < -40) {
 			visible = false;
 		} else {
 			checkCollision();
@@ -33,6 +33,8 @@ public class enemyCheck {
 		if(r.intersects(start.getRobot().fullRobot))
 		{
 			visible = false;
+			x=-100;
+		start.getRobot().setRootDecrease(-1);
 			
 		}
 		

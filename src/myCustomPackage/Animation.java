@@ -12,7 +12,6 @@ public class Animation {
 	public Animation() {
 		frames = new ArrayList();
 		totalDuration = 0;
-
 		synchronized (this) {
 			animTime = 0;
 			currentFrame = 0;

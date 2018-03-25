@@ -3,23 +3,27 @@ package myCustomPackage;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class Enemy {
+public class Enemy implements EnemyInterface{
 
 	private int maxHealth, currentHealth, power, speedX, centerX, centerY;
 	private Background bg = start.getBg1();
 	Rectangle r;
-	public int health = 5;
+	public int health = myStaticClass.enemyHealth;
 	private int movementSpeed;
 	private Robot robot = start.getRobot();
 
-	Boolean isPerfect = false;
+	Boolean isPerfect = false,isOutOfCover=false;
 	int count = 6000;
 	int in = 0;
 	public ArrayList<enemyCheck> a;
 
 	int time;
+	public boolean setCrash=false;
+	int initialX,initialY;
 
 	public Enemy(int x, int y, int time) {
+		initialX=x;
+		initialY=y;
 		centerX = x;
 		centerY = y;
 		this.time = time;
@@ -30,24 +34,48 @@ public class Enemy {
 
 	// Behavioral Methods
 	public void update() {
+		attack();
+		if(health>0){
 		try {
 			follow();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// centerX += speedX * 2;
+		centerX += speedX * 2;
 		speedX = bg.getSpeedX() * 5 + movementSpeed;
-		r.setBounds(centerX - 15, centerY - 10, 30, 50);
+		
+		r.setBounds(centerX+5 - myStaticClass.heliBoyWidth/2, centerY +5-myStaticClass.heliBoyHeight/2, myStaticClass.heliBoyWidth, myStaticClass.heliBoyHeight-5);
+		if(centerX+20<0|| centerX>myStaticClass.screenWidth+20)
+		{
+			isOutOfCover=true;
+		}
+		else
+		{
+			isOutOfCover=false;
+		}
 		addCheck();
+		}
+		else
+		{
+			setCrash=true;
+			centerX=-100;
+			r.setBounds(centerX +5- myStaticClass.heliBoyWidth/2, centerY +5-myStaticClass.heliBoyHeight/2, myStaticClass.heliBoyWidth, myStaticClass.heliBoyHeight-5);
 
+		}
 	}
 
+	public Boolean isOutOfCoverage()
+	{
+		return isOutOfCover;
+		
+	}
 	private void addCheck() {
 		c();
 	}
 
 	public void c() {
-		System.out.println("size: "+a.size());
+		if(!isOutOfCoverage())
+		{
 		if (a.size() % 2== 0)
 			in += 1500;
 		else
@@ -55,12 +83,12 @@ public class Enemy {
 		if (in >= count) {
 			in = in % count;
 			if (manageArray())
-				a.add(new enemyCheck(centerX - 40, centerY + 8));
+				a.add(new enemyCheck(centerX - 20, centerY));
 		}
-
+		}
 	}
 
-	public boolean manageArray() {
+	public Boolean manageArray() {
 		 if(robot.fullRobot.getY()-10<=centerY &&
 		 robot.fullRobot.getY()+robot.fullRobot.getHeight()+1>centerY)
 
@@ -96,7 +124,13 @@ public class Enemy {
 	}
 
 	public void attack() {
-
+     if(robot.yellowRed.intersects(r)){
+		if(robot.checkSwordBoolean)
+		{
+			health-=1;
+			System.out.println("health: "+health);
+		}
+}
 	}
 
 	public int getMaxHealth() {
@@ -104,7 +138,7 @@ public class Enemy {
 	}
 
 	public int getCurrentHealth() {
-		return currentHealth;
+		return health;
 	}
 
 	public int getPower() {
@@ -164,5 +198,8 @@ public class Enemy {
 		centerX = x;
 		centerY = y;
 		a.clear();
+		health=myStaticClass.enemyHealth;
+		setCrash=false;
 	}
+	
 }

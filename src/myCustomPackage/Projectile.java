@@ -8,7 +8,7 @@ public class Projectile {
 	private int x, y, speedX;
 	private Boolean visible;
 
-	Rectangle r;
+	public static Rectangle r;
 
 	public Projectile(int startX, int startY) {
 		x = startX;
@@ -24,7 +24,7 @@ public class Projectile {
 		if (x > 800) {
 			visible = false;
 		}
-		r.setBounds(x, y, 20, 20);
+		r.setBounds(x, y, 15, 15);
 		if (x < 800) {
 			checkCollision();
 		}
@@ -38,16 +38,16 @@ public class Projectile {
 			if (r.intersects(e.r)) {
 				visible = false;
 				if (e.health > 0) {
-					e.health -= 1;
+					e.health -= 10;
 				}
 				if (e.health == 0) {
-					e.setCenterX(-100);
 					start.score += 5;
 				}
 
 			}
 		}
-	}
+		}
+	
 
 	public int getX() {
 		return x;
@@ -80,4 +80,11 @@ public class Projectile {
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+	
+	public static Rectangle getRect()
+	{
+		return r;
+	}
+
+	
 }
